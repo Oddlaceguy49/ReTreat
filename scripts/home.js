@@ -21,13 +21,26 @@ function getCookie(name) {
 // Retrieve accent color from cookie
 const accentColor = getCookie("accentcolour") ? `#${getCookie("accentcolour")}` : "#007bff"; // Default color
 
-// Set accent color for all buttons
+// Do when content loads
 document.addEventListener("DOMContentLoaded", function () {
+    // Set accent color for buttons
     document.querySelectorAll("button").forEach(button => {
         button.style.backgroundColor = accentColor;
     });
 
+    // Grab Dark Mode setting from storage
+    if (localStorage.getItem("dark-mode") === "true") {
+        document.body.classList.add("dark-mode");
+        document.getElementById("mode-toggle").innerHTML = '<img src="/assets/sun.png" width="40" height="40">';
+    } else {
+        document.getElementById("mode-toggle").innerHTML = '<img src="/assets/moon.png" width="40" height="40">';
+    }
+    
     loadPosts(); // Load posts when the page loads
+
+    document.getElementById("posts").addEventListener("scrollend", (event) => {
+        loadPosts();
+    });
 });
 
 function settings() {
@@ -130,12 +143,3 @@ function toggleMode() {
         localStorage.setItem("dark-mode", "false");
     }
 }
-
-document.addEventListener("DOMContentLoaded", function () {
-    if (localStorage.getItem("dark-mode") === "true") {
-        document.body.classList.add("dark-mode");
-        document.getElementById("mode-toggle").innerHTML = '<img src="/assets/sun.png" width="40" height="40">';
-    } else {
-        document.getElementById("mode-toggle").innerHTML = '<img src="/assets/moon.png" width="40" height="40">';
-    }
-});
